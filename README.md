@@ -1,4 +1,4 @@
-# SENSU
+# PROMETHEUS-GRAFANA
 
 ## Description
 
