@@ -68,7 +68,7 @@ First of all, you need to deploy the docker engine.
     ./scripts/install_deps.sh
 ```
 
-### On dev environment
+### Docker compose commands
 
 * Deploy the docker compose
 
@@ -76,12 +76,24 @@ First of all, you need to deploy the docker engine.
     docker compose --env-file dev.env up -d
 ```
 
-### On stage environment
-
-* Deploy the docker compose
+* Destroy the infra, include the volumes
 
 ```
-    docker compose --env-file stage.env up -d
+    docker compose --env-file dev.env down --volumes
+```
+
+### Access the dashboards
+
+* Grafana (as default dashboard)
+
+```
+    curl -H "Host: prometheus.cld.education" http://localhost:8080/
+```
+
+* Prometheus
+
+```
+    curl -H "Host: prometheus.cld.education" http://localhost:8080/admin
 ```
 
 ## Directory structure
