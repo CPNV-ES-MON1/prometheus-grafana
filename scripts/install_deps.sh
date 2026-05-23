@@ -15,7 +15,7 @@ echo "[INFO] Starting Docker setup"
 # Config
 ###############################################################################
 
-DOCKER_DATA_ROOT="/docker-data"
+DOCKER_DATA_ROOT="/mnt/docker-data"
 DEVICE="/dev/nvme1n1"
 FILESYSTEM="ext4"
 

@@ -13,50 +13,76 @@ List all dependencies and their version needed to run the project as :
 |Role|Tool|Version|
 |:--|:--|:--|
 |VCS|Git SCM|[2.54 or higher](https://git-scm.com/install/)|
-|IaC|Terraform|[1.15 or higher](https://developer.hashicorp.com/terraform/install)|
 |IDE|VS Code|[1.118 or higher](https://code.visualstudio.com/thank-you?dv=linux64_deb)|
-|Virtualization|Docker Engine|[v29 or higher](https://docs.docker.com/engine/install/)|
+|Docker Host|Debian|[13.5.0 or higher](https://www.debian.org/download)|
+
+### Hardware Requirements
+
+We deliver here your dev and stage requirements. Feel you free to adapt it.
+
+In our solution we host on the same Debian Host the Docker Engine, without K8s. The clients monitored are in the same subnets.
+
+To see the details or get more info for prod environnement, read this [article](https://github.com/CPNV-ES-MON1/prometheus-grafana/wiki/Configuration-mat%C3%A9rielle-du-server)
+
+* Docker Host
+
+|Criteria|Decision|
+|:--|:--|
+|OS|Debian 13|
+|vCPU|2|
+|vRam|4Go|
+|OS Storage - SSD|8 Go|
+|Data Storage - SSD|20 Go|
+
+Prerequisits
+|Criteria|Decision|
+|:--|:--|
+|Docker|v29|
+
+On AWS, we deploy the docker engine on a [t3.medium instance](https://aws.amazon.com/ec2/instance-types/t3/).
+
+---
+
+#### Prod
+
+Read carefully this [article](https://massedcompute.com/faq-answers/?question=What%20are%20the%20system%20requirements%20for%20running%20Prometheus%20and%20Grafana%20in%20a%20Kubernetes%20cluster?.)
+
 
 ### Configuration
 
-* Cloud Provider Credentials
+* Copy the .env.example for your environment
 
-You will need acces to the cloud provider including this following permissions:
-
+```bash
+    cp .env.example dev.env
 ```
-         "ec2:DescribeInstances", 
-         "ec2:DescribeImages",
-         "ec2:DescribeTags", 
-         "ec2:DescribeSnapshots"
-```
-
-* Licence
-
-A licence need to be requested to info@myproduct.com.
-
 
 ## Deployment
 
+We assume that your infra (IaaS) is already managed by another projet (Terraform).
+
+First of all, you need to deploy the docker engine.
+
+* To format, mount the volume as well as setup the Docker engine, run this script:
+
+```bash
+    ./scripts/install_deps.sh
+```
+
 ### On dev environment
 
-* Set the environments variables
+* Deploy the docker compose
 
 ```
-cp sample.env dev.env
+    docker compose --env-file dev.env up -d
 ```
-
-Update all variable according to your setup.
-
 
 ### On stage environment
 
-* Set the environments variables
+* Deploy the docker compose
 
 ```
-cp sample.env stage.env
+    docker compose --env-file stage.env up -d
 ```
-
-Update all variable according to your setup.
 
 ## Directory structure
 
