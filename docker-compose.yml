@@ -11,6 +11,18 @@ services:
     networks:
       - monitoring
 
+  node-exporter2:
+    image: prom/node-exporter:v1.9.1
+    container_name: node-exporter2
+    restart: unless-stopped
+    command:
+      - --path.rootfs=/host
+    pid: host
+    volumes:
+      - /:/host:ro,rslave
+    networks:
+      - monitoring
+
   prometheus:
     image: prom/prometheus:v3.2.1
     container_name: prometheus
@@ -24,9 +36,12 @@ services:
       - --storage.tsdb.retention.size=${PROMETHEUS_RETENTION_SIZE}
       - --web.external-url=http://${MONITORING_DOMAIN}:${NGINX_HTTP_PORT}/admin
       - --web.route-prefix=/
+      - --web.enable-lifecycle
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
+      - ./prometheus/targets:/etc/prometheus/targets:ro
+      
     networks:
       - monitoring
 
@@ -43,6 +58,8 @@ services:
       GF_SERVER_ROOT_URL: http://${MONITORING_DOMAIN}:${NGINX_HTTP_PORT}/
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     networks:
       - monitoring
 
